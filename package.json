@@ -1,0 +1,19 @@
+{
+  "name": "42brick_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/42brick/42brick_backend.git"
+  },
+  "author": "bolee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/42brick/42brick_backend/issues"
+  },
+  "homepage": "https://github.com/42brick/42brick_backend#readme"
+}
