@@ -12,6 +12,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "moralis": "^1.11.0",
     "morgan": "~1.9.1",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.5.0"
