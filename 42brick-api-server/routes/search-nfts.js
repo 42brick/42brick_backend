@@ -25,7 +25,7 @@ const router = express.Router();
  *             schema:
  *               type: object
  */
-router.get('/', async(req, res, next) => {
+router.get('/', async (req, res, next) => {
     
     await Moralis.start({serverUrl: process.env.SERVER_URL, appId: process.env.APP_ID});
     const keyword = req.query.keyword;
