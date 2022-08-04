@@ -5,9 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var testRouter = require('./routes/test');
 var getNFTsRouter = require('./routes/get-nfts');
+var searchNFTsRouter = require('./routes/search-nfts');
+var nftDataRouter = require('./routes/nft-data');
 
 var app = express();
 
@@ -39,9 +39,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/test', testRouter);
 app.use('/get-nfts', getNFTsRouter);
+app.use('/search-nfts', searchNFTsRouter);
+app.use('/ntf-data', nftDataRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
