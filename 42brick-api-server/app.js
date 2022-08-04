@@ -7,7 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
-var testAPIRouter = require('./routes/test-api');
+var getNFTsRouter = require('./routes/get-nfts');
 
 var app = express();
 
@@ -26,7 +26,7 @@ const options = {
 };
 const openapiSpec = swaggerJsdoc(options);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, {explorer: true}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/test', testRouter);
-app.use('/test-api', testAPIRouter);
+app.use('/get-nfts', getNFTsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
