@@ -1,4 +1,4 @@
-require('dotenv').config({path: '../.env'});
+require('dotenv').config();
 
 const express = require('express');
 const Moralis = require('moralis/node');
@@ -7,7 +7,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * /nft-data?addr={addr}&id={id}&symbol={symbol}:
+ * /nft-data:
  *   get:
  *     tags: [Get NFTs]
  *     description: search NFT using addr, id, and symbol
@@ -47,6 +47,7 @@ router.get('/', async (req, res, next) => {
         token_id: id,
         chain: symbol
     }
+    console.log(options)
     const nftMetadata = await Moralis.Web3API.token.getTokenIdMetadata(options)
 
 	res.json(nftMetadata);

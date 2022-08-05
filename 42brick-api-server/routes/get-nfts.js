@@ -1,4 +1,4 @@
-require('dotenv').config({path: '../.env'});
+require('dotenv').config();
 
 const express = require('express');
 const Moralis = require('moralis/node');
@@ -7,7 +7,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * /get-nfts?addr={addr}:
+ * /get-nfts:
  *   get:
  *     tags: [Get NFTs]
  *     description: Get NFTs in address
@@ -17,6 +17,10 @@ const router = express.Router();
  *         required: true
  *         schema:
  *           type: string
+ *         examples:
+ *           Sample:
+ *            value: "0x921560673F20465c118072FF3A70D0057096c123"
+ *            summary: example address
  *     responses:
  *       200:
  *         description: Returns NFTs in address.
@@ -28,15 +32,107 @@ const router = express.Router();
  *                 Ethereum:
  *                   type: object
  *                   description: "NFTs in Ethereum"
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: string
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: string
+ *                           maxItems: 0
+ *                         status:
+ *                           type: string
  *                 BSC:
  *                   type: object
  *                   description: "NFTs in Binance Smart Chain"
- *                 Polygon:
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: string
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: string
+ *                           maxItems: 0
+ *                         status:
+ *                           type: string
+ *                 Ploygon:
  *                   type: object
- *                   description: "NFTs in Polygon"
+ *                   description: "NFTs in Ploygon"
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: string
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: string
+ *                           maxItems: 0
+ *                         status:
+ *                           type: string
  *                 Fantom:
  *                   type: object
- *                   description: "NFTs in Fantom"
+ *                   description: "NFTs in Ploygon"
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: string
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: string
+ *                           maxItems: 0
+ *                         status:
+ *                           type: string
  */
 router.get('/', async (req, res, next) => {
 
@@ -78,7 +174,7 @@ router.get('/', async (req, res, next) => {
         }
     };
 
-	res.json(NFTs);
+    res.json(NFTs);
 });
 
 module.exports = router;

@@ -1,4 +1,4 @@
-require('dotenv').config({path: '../.env'});
+require('dotenv').config();
 
 const express = require('express');
 const Moralis = require('moralis/node');
@@ -7,7 +7,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * /search-nfts?addr={addr}:
+ * /search-nfts:
  *   get:
  *     tags: [Get NFTs]
  *     description: search NFTs using keyword
@@ -17,6 +17,10 @@ const router = express.Router();
  *         required: true
  *         schema:
  *           type: string
+ *         examples:
+ *           Sample:
+ *            value: "bear"
+ *            summary: example keyword
  *     responses:
  *       200:
  *         description: Returns NFTs searched by keyword.
@@ -24,9 +28,206 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 Ethereum:
+ *                   type: object
+ *                   description: "NFTs in Ethereum"
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: integer
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: object
+ *                             properties:
+ *                               token_id:
+ *                                 type: string
+ *                               token_address:
+ *                                 type: string
+ *                               token_uri:
+ *                                 type: string
+ *                               metadata:
+ *                                 type: string
+ *                               contract_type:
+ *                                 type: string
+ *                               token_hash:
+ *                                 type: string
+ *                               minter_address:
+ *                                 type: string
+ *                               block_number_minted:
+ *                                 type: string
+ *                               transaction_minted:
+ *                                 type: string
+ *                               last_token_uri_sync:
+ *                                 type: string
+ *                               last_metadata_sync:
+ *                                 type: string
+ *                               created_at:
+ *                                 type: string
+ *                           maxItems: 1
+ *                 BSC:
+ *                   type: object
+ *                   description: "NFTs in Binance Smart Chain"
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: integer
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: object
+ *                             properties:
+ *                               token_id:
+ *                                 type: string
+ *                               token_address:
+ *                                 type: string
+ *                               token_uri:
+ *                                 type: string
+ *                               metadata:
+ *                                 type: string
+ *                               contract_type:
+ *                                 type: string
+ *                               token_hash:
+ *                                 type: string
+ *                               minter_address:
+ *                                 type: string
+ *                               block_number_minted:
+ *                                 type: string
+ *                               transaction_minted:
+ *                                 type: string
+ *                               last_token_uri_sync:
+ *                                 type: string
+ *                               last_metadata_sync:
+ *                                 type: string
+ *                               created_at:
+ *                                 type: string
+ *                           maxItems: 1
+ *                 Ploygon:
+ *                   type: object
+ *                   description: "NFTs in Ploygon"
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: integer
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: object
+ *                             properties:
+ *                               token_id:
+ *                                 type: string
+ *                               token_address:
+ *                                 type: string
+ *                               token_uri:
+ *                                 type: string
+ *                               metadata:
+ *                                 type: string
+ *                               contract_type:
+ *                                 type: string
+ *                               token_hash:
+ *                                 type: string
+ *                               minter_address:
+ *                                 type: string
+ *                               block_number_minted:
+ *                                 type: string
+ *                               transaction_minted:
+ *                                 type: string
+ *                               last_token_uri_sync:
+ *                                 type: string
+ *                               last_metadata_sync:
+ *                                 type: string
+ *                               created_at:
+ *                                 type: string
+ *                           maxItems: 1
+ *                 Fantom:
+ *                   type: object
+ *                   description: "NFTs in Fantom"
+ *                   properties:
+ *                     chain:
+ *                       type: string
+ *                     symbol:
+ *                       type: string
+ *                     result:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                         page:
+ *                           type: integer
+ *                         page_size:
+ *                           type: integer
+ *                         cursor:
+ *                           type: integer
+ *                         result:
+ *                           type: array
+ *                           items: 
+ *                             type: object
+ *                             properties:
+ *                               token_id:
+ *                                 type: string
+ *                               token_address:
+ *                                 type: string
+ *                               token_uri:
+ *                                 type: string
+ *                               metadata:
+ *                                 type: string
+ *                               contract_type:
+ *                                 type: string
+ *                               token_hash:
+ *                                 type: string
+ *                               minter_address:
+ *                                 type: string
+ *                               block_number_minted:
+ *                                 type: string
+ *                               transaction_minted:
+ *                                 type: string
+ *                               last_token_uri_sync:
+ *                                 type: string
+ *                               last_metadata_sync:
+ *                                 type: string
+ *                               created_at:
+ *                                 type: string
+ *                           maxItems: 1
  */
 router.get('/', async (req, res, next) => {
-    
+
     await Moralis.start({serverUrl: process.env.SERVER_URL, appId: process.env.APP_ID});
     const keyword = req.query.keyword;
 
