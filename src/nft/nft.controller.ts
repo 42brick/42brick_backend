@@ -1,32 +1,37 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { NftService } from './nft.service';
+import { SearchService } from './search/search.service';
+import { DataService } from './data/data.service';
+import * as nftUtils from './utils/nft.utils';
 
 @Controller('nft')
 export class NftController {
-  constructor(private readonly nftService: NftService) {}
+  constructor(
+    private readonly nftService: NftService,
+    private readonly searchService: SearchService,
+    private readonly dataService: DataService,
+  ) {}
 
   @Get()
-  getNFTs(@Param('addr') addr: string) {
-    return this.nftService.getNFTs(addr);
+  getNFTs(@Query('addr') addr: string, @Query('symbol') symbol?: string) {
+    return this.nftService.getNFTs(addr, symbol);
   }
 
-  @Get('eth')
-  getEthNFTs(@Param('addr') addr: string) {
-    return this.nftService.getNFTs(addr, 'eth');
+  @Get('search')
+  getEthNFTs(
+    @Query('keyword') keyword: string,
+    @Query('symbol') symbol?: string,
+    @Query('filter') filter?: nftUtils.filterType,
+  ) {
+    return this.searchService.searchNFTs(keyword, symbol, filter);
   }
 
-  @Get('bsc')
-  getBscNFTs(@Param('addr') addr: string) {
-    return this.nftService.getNFTs(addr, 'bsc');
-  }
-
-  @Get('polygon')
-  getPolygonNFTs(@Param('addr') addr: string) {
-    return this.nftService.getNFTs(addr, 'polygon');
-  }
-
-  @Get('fantom')
-  getFantomNFTs(@Param('addr') addr: string) {
-    return this.nftService.getNFTs(addr, 'fantom');
+  @Get('data')
+  getBscNFTs(
+    @Query('token-addr') tokenAddr: string,
+    @Query('token-Id') tokenId: string,
+    @Query('symbol') symbol: string,
+  ) {
+    return this.dataService.nftData(tokenAddr, tokenId, symbol);
   }
 }
