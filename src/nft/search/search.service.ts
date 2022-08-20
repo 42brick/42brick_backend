@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
@@ -18,11 +19,15 @@ export class SearchService {
     filter?: nftUtils.filterType,
   ) {
     let result: unknown;
+    let flag = false;
+
     nftUtils.is_valid_symbol(symbol);
     nftUtils.is_valid_keyword(keyword);
+    if (filter)
+      flag = nftUtils.is_valid_filter(filter);
+
     try {
-      if (filter) {
-        nftUtils.is_valid_filter(filter);
+      if (flag) {
         result = await Moralis.EvmApi.token.searchNFTs({
           chain: nftUtils.symbol_to_symbol(symbol),
           q: keyword,
@@ -54,11 +59,15 @@ export class SearchService {
   }
 
   async searchAllNFTs(keyword: string, filter?: nftUtils.filterType) {
+    let flag = false;
+
     nftUtils.is_valid_keyword(keyword);
+    if (filter)
+      flag = nftUtils.is_valid_filter(filter);
 
     try {
-      if (filter) {
-        nftUtils.is_valid_filter(filter);
+      if (flag) {
+        console.log(1);
 
         const ethNFTs = await Moralis.EvmApi.token.searchNFTs({
           chain: EvmChain.ETHEREUM,
@@ -149,6 +158,7 @@ export class SearchService {
         },
       };
     } catch (e) {
+      console.log(e);
       if (e['details']) {
         const status = e['details']['response']['status'];
         const statusText = e['details']['response']['statusText'];

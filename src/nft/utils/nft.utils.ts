@@ -13,7 +13,7 @@ export type filterType =
   | 'description,attributes'
   | 'name,description,attributes';
 
-export const is_valid_filter = (filter: filterType) => {
+export const is_valid_filter = (filter: filterType): boolean => {
   if (
     filter === 'name' ||
     filter === 'description' ||
@@ -24,7 +24,7 @@ export const is_valid_filter = (filter: filterType) => {
     filter === 'description,attributes' ||
     filter === 'name,description,attributes'
   )
-    return;
+    return true;
   throw new BadRequestException(
     `You cannot use this filter. Please check again. Current filter: ${filter}`,
   );

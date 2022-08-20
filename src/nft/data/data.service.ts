@@ -17,6 +17,7 @@ export class DataService {
     symbol: nftUtils.allowedSymbol,
   ) {
     nftUtils.is_valid_symbol(symbol);
+
     try {
       const result = await Moralis.EvmApi.token.getTokenIdMetadata({
         address: tokenAddr,
