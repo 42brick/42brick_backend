@@ -29,7 +29,7 @@ export class NftController {
     return this.searchService.searchNFTs(keyword, symbol, filter);
   }
 
-  @Get('search')
+  @Get('search/all')
   async searchAllNFTs(
     @Query('keyword') keyword: string,
     @Query('filter') filter?: nftUtils.filterType,
