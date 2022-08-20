@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
 import * as dotenv from 'dotenv';
@@ -12,13 +12,13 @@ Moralis.start({
 
 @Injectable()
 export class SearchService {
-  searchNFTs(keyword: string, symbol?: string, filter?: nftUtils.filterType) {
-    if (!nftUtils.is_valid_symbol(symbol))
-      throw new BadRequestException(
-        `A symbol that cannot be processed. Please check again. Vegetable symbol: ${symbol}`,
-      );
+  async searchNFTs(
+    keyword: string,
+    symbol?: nftUtils.allowedSymbol,
+    filter?: nftUtils.filterType,
+  ) {
     if (symbol && filter) {
-      const result = Moralis.EvmApi.token.searchNFTs({
+      const result = await Moralis.EvmApi.token.searchNFTs({
         chain: nftUtils.symbol_to_symbol(symbol),
         q: keyword,
         filter: filter,
@@ -26,10 +26,10 @@ export class SearchService {
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: result,
+        result: result['_data'],
       };
     } else if (symbol) {
-      const result = Moralis.EvmApi.token.searchNFTs({
+      const result = await Moralis.EvmApi.token.searchNFTs({
         chain: nftUtils.symbol_to_symbol(symbol),
         q: keyword,
         filter: 'global',
@@ -37,10 +37,10 @@ export class SearchService {
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: result,
+        result: result['_data'],
       };
     } else if (filter) {
-      const result = Moralis.EvmApi.token.searchNFTs({
+      const result = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.ETHEREUM,
         q: keyword,
         filter: filter,
@@ -48,26 +48,85 @@ export class SearchService {
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: result,
+        result: result['_data'],
       };
     }
 
-    const ethNFTs = Moralis.EvmApi.token.searchNFTs({
+    const result = await Moralis.EvmApi.token.searchNFTs({
       chain: EvmChain.ETHEREUM,
       q: keyword,
       filter: 'global',
     });
-    const bscNFTs = Moralis.EvmApi.token.searchNFTs({
+    return {
+      chain: 'Ethereum',
+      symbol: 'eth',
+      result: result['_data'],
+    };
+  }
+
+  async searchAllNFTs(keyword: string, filter?: nftUtils.filterType) {
+    if (filter) {
+      const ethNFTs = await Moralis.EvmApi.token.searchNFTs({
+        chain: EvmChain.ETHEREUM,
+        q: keyword,
+        filter: filter,
+      });
+      const bscNFTs = await Moralis.EvmApi.token.searchNFTs({
+        chain: EvmChain.BSC,
+        q: keyword,
+        filter: filter,
+      });
+      const polygonNFTs = await Moralis.EvmApi.token.searchNFTs({
+        chain: EvmChain.POLYGON,
+        q: keyword,
+        filter: filter,
+      });
+      const fantomNFTs = await Moralis.EvmApi.token.searchNFTs({
+        chain: EvmChain.FANTOM,
+        q: keyword,
+        filter: filter,
+      });
+
+      return {
+        Ethereum: {
+          chain: 'Ethereum',
+          symbol: 'eth',
+          result: ethNFTs['_data'],
+        },
+        BSC: {
+          chain: 'Binance Smart Chain',
+          symbol: 'bsc',
+          result: bscNFTs['_data'],
+        },
+        Polygon: {
+          chain: 'Polygon',
+          symbol: 'matic',
+          result: polygonNFTs['_data'],
+        },
+        Fantom: {
+          chain: 'Fantom',
+          symbol: 'ftm',
+          result: fantomNFTs['_data'],
+        },
+      };
+    }
+
+    const ethNFTs = await Moralis.EvmApi.token.searchNFTs({
+      chain: EvmChain.ETHEREUM,
+      q: keyword,
+      filter: 'global',
+    });
+    const bscNFTs = await Moralis.EvmApi.token.searchNFTs({
       chain: EvmChain.BSC,
       q: keyword,
       filter: 'global',
     });
-    const polygonNFTs = Moralis.EvmApi.token.searchNFTs({
+    const polygonNFTs = await Moralis.EvmApi.token.searchNFTs({
       chain: EvmChain.POLYGON,
       q: keyword,
       filter: 'global',
     });
-    const fantomNFTs = Moralis.EvmApi.token.searchNFTs({
+    const fantomNFTs = await Moralis.EvmApi.token.searchNFTs({
       chain: EvmChain.FANTOM,
       q: keyword,
       filter: 'global',
@@ -77,22 +136,22 @@ export class SearchService {
       Ethereum: {
         chain: 'Ethereum',
         symbol: 'eth',
-        result: ethNFTs,
+        result: ethNFTs['_data'],
       },
       BSC: {
         chain: 'Binance Smart Chain',
         symbol: 'bsc',
-        result: bscNFTs,
+        result: bscNFTs['_data'],
       },
       Polygon: {
         chain: 'Polygon',
-        symbol: 'polygon',
-        result: polygonNFTs,
+        symbol: 'matic',
+        result: polygonNFTs['_data'],
       },
       Fantom: {
         chain: 'Fantom',
-        symbol: 'fantom',
-        result: fantomNFTs,
+        symbol: 'ftm',
+        result: fantomNFTs['_data'],
       },
     };
   }

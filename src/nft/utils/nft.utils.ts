@@ -1,4 +1,7 @@
 import { EvmChain, EvmChainish } from '@moralisweb3/evm-utils';
+import { BadRequestException } from '@nestjs/common';
+
+export type allowedSymbol = 'eth' | 'bsc' | 'matic' | 'ftm';
 
 export type filterType =
   | 'name'
@@ -10,15 +13,34 @@ export type filterType =
   | 'description,attributes'
   | 'name,description,attributes';
 
-export const is_valid_symbol = (symbol: string): boolean => {
+export const is_valid_symbol = (symbol: string) => {
   if (
     symbol === 'eth' ||
     symbol === 'bsc' ||
     symbol === 'matic' ||
     symbol === 'ftm'
   )
-    return true;
-  return false;
+    return;
+  throw new BadRequestException(
+    `A symbol that cannot be processed. Please check again. Current symbol: ${symbol}`,
+  );
+};
+
+export const is_valid_filter = (filter: string) => {
+  if (
+    filter === 'name' ||
+    filter === 'description' ||
+    filter === 'attributes' ||
+    filter === 'global' ||
+    filter === 'name,description' ||
+    filter === 'name,attributes' ||
+    filter === 'description,attributes' ||
+    filter === 'name,description,attributes'
+  )
+    return;
+  throw new BadRequestException(
+    `You cannot use this filter. Please check again. Current filter: ${filter}`,
+  );
 };
 
 export const symbol_to_symbol = (symbol: string): EvmChainish => {
