@@ -67,8 +67,6 @@ export class SearchService {
 
     try {
       if (flag) {
-        console.log(1);
-
         const ethNFTs = await Moralis.EvmApi.token.searchNFTs({
           chain: EvmChain.ETHEREUM,
           q: keyword,
@@ -158,7 +156,6 @@ export class SearchService {
         },
       };
     } catch (e) {
-      console.log(e);
       if (e['details']) {
         const status = e['details']['response']['status'];
         const statusText = e['details']['response']['statusText'];
