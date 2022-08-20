@@ -20,6 +20,15 @@ export class NftController {
     return this.nftService.getNFTs(addr, symbol);
   }
 
+  @Get('data')
+  async getBscNFTs(
+    @Query('token-addr') tokenAddr: string,
+    @Query('token-Id') tokenId: string,
+    @Query('symbol') symbol: nftUtils.allowedSymbol,
+  ) {
+    return this.dataService.nftData(tokenAddr, tokenId, symbol);
+  }
+
   @Get('search')
   async searchNFTs(
     @Query('keyword') keyword: string,
@@ -35,14 +44,5 @@ export class NftController {
     @Query('filter') filter?: nftUtils.filterType,
   ) {
     return this.searchService.searchAllNFTs(keyword, filter);
-  }
-
-  @Get('data')
-  async getBscNFTs(
-    @Query('token-addr') tokenAddr: string,
-    @Query('token-Id') tokenId: string,
-    @Query('symbol') symbol: nftUtils.allowedSymbol,
-  ) {
-    return this.dataService.nftData(tokenAddr, tokenId, symbol);
   }
 }
