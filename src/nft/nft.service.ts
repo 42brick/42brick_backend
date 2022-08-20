@@ -16,10 +16,11 @@ export class NftService {
       chain: nftUtils.symbol_to_symbol(symbol),
       address: addr,
     });
+
     return {
       chain: nftUtils.symbol_to_chain(symbol),
       symbol: symbol,
-      result: result,
+      result: result['_data'],
     };
   }
 }

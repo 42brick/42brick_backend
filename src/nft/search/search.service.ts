@@ -17,12 +17,15 @@ export class SearchService {
     symbol?: nftUtils.allowedSymbol,
     filter?: nftUtils.filterType,
   ) {
+    nftUtils.is_valid_filter(filter);
+
     if (symbol && filter) {
       const result = await Moralis.EvmApi.token.searchNFTs({
         chain: nftUtils.symbol_to_symbol(symbol),
         q: keyword,
         filter: filter,
       });
+
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,

@@ -13,20 +13,7 @@ export type filterType =
   | 'description,attributes'
   | 'name,description,attributes';
 
-export const is_valid_symbol = (symbol: string) => {
-  if (
-    symbol === 'eth' ||
-    symbol === 'bsc' ||
-    symbol === 'matic' ||
-    symbol === 'ftm'
-  )
-    return;
-  throw new BadRequestException(
-    `A symbol that cannot be processed. Please check again. Current symbol: ${symbol}`,
-  );
-};
-
-export const is_valid_filter = (filter: string) => {
+export const is_valid_filter = (filter: filterType) => {
   if (
     filter === 'name' ||
     filter === 'description' ||
@@ -43,14 +30,18 @@ export const is_valid_filter = (filter: string) => {
   );
 };
 
-export const symbol_to_symbol = (symbol: string): EvmChainish => {
+export const symbol_to_symbol = (symbol: allowedSymbol): EvmChainish => {
   if (symbol === 'eth') return EvmChain.ETHEREUM;
   else if (symbol === 'bsc') return EvmChain.BSC;
   else if (symbol === 'matic') return EvmChain.POLYGON;
   else if (symbol === 'ftm') return EvmChain.FANTOM;
+  else
+    throw new BadRequestException(
+      `A symbol that cannot be processed. Please check again. Current symbol: ${symbol}`,
+    );
 };
 
-export const symbol_to_chain = (symbol: string): string => {
+export const symbol_to_chain = (symbol: allowedSymbol): string => {
   if (symbol === 'eth') return 'Ethereum';
   else if (symbol === 'bsc') return 'Binance Smart Chain';
   else if (symbol === 'matic') return 'Polygon';

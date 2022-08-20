@@ -21,6 +21,7 @@ export class DataService {
       tokenId: tokenId,
       chain: nftUtils.symbol_to_symbol(symbol),
     });
+
     return {
       chain: nftUtils.symbol_to_chain(symbol),
       symbol: symbol,
