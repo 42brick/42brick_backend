@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, BadRequestException } from '@nestjs/common';
 import Moralis from 'moralis';
 import * as dotenv from 'dotenv';
 import * as nftUtils from '../utils/nft.utils';
@@ -16,16 +16,28 @@ export class DataService {
     tokenId: string,
     symbol: nftUtils.allowedSymbol,
   ) {
-    const result = await Moralis.EvmApi.token.getTokenIdMetadata({
-      address: tokenAddr,
-      tokenId: tokenId,
-      chain: nftUtils.symbol_to_symbol(symbol),
-    });
+    nftUtils.is_valid_symbol(symbol);
+    try {
+      const result = await Moralis.EvmApi.token.getTokenIdMetadata({
+        address: tokenAddr,
+        chain: nftUtils.symbol_to_symbol(symbol),
+        tokenId: tokenId,
+      });
 
-    return {
-      chain: nftUtils.symbol_to_chain(symbol),
-      symbol: symbol,
-      result: result['_data'],
-    };
+      return {
+        chain: nftUtils.symbol_to_chain(symbol),
+        symbol: symbol,
+        result: result['_data'],
+      };
+    } catch (e) {
+      if (e['details']) {
+        const status = e['details']['response']['status'];
+        const statusText = e['details']['response']['statusText'];
+        throw new HttpException(statusText, status);
+      } else if (e['code'] && e['code'] === 'C0005') {
+        throw new BadRequestException('Invalid address provided');
+      }
+      throw new BadRequestException();
+    }
   }
 }

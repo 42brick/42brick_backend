@@ -30,6 +30,19 @@ export const is_valid_filter = (filter: filterType) => {
   );
 };
 
+export const is_valid_symbol = (symbol: allowedSymbol) => {
+  if (
+    symbol === 'eth' ||
+    symbol === 'bsc' ||
+    symbol === 'matic' ||
+    symbol === 'ftm'
+  )
+    return;
+  throw new BadRequestException(
+    `It is not allowed symbol. Please check again. Current filter: ${symbol}`,
+  );
+};
+
 export const symbol_to_symbol = (symbol: allowedSymbol): EvmChainish => {
   if (symbol === 'eth') return EvmChain.ETHEREUM;
   else if (symbol === 'bsc') return EvmChain.BSC;
@@ -46,4 +59,19 @@ export const symbol_to_chain = (symbol: allowedSymbol): string => {
   else if (symbol === 'bsc') return 'Binance Smart Chain';
   else if (symbol === 'matic') return 'Polygon';
   else if (symbol === 'ftm') return 'Fantom';
+};
+
+export const is_valid_keyword = (keyword: string) => {
+  if (keyword == undefined)
+    throw new BadRequestException(
+      'Any keyword is not inputed. Please input the keyword that its minimum length is 3 and maximum length is 256',
+    );
+  if (keyword.length < 3)
+    throw new BadRequestException(
+      'keyword length is lower than 3. Please try again to input the keyword that its minimum length is 3 and maximum length is 256',
+    );
+  if (keyword.length > 256)
+    throw new BadRequestException(
+      'keyword length is bigger than 256. Please try again to input the keyword that its minimum length is 3 and maximum length is 256',
+    );
 };

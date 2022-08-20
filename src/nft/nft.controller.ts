@@ -23,7 +23,7 @@ export class NftController {
   @Get('data')
   async getBscNFTs(
     @Query('token-addr') tokenAddr: string,
-    @Query('token-Id') tokenId: string,
+    @Query('token-id') tokenId: string,
     @Query('symbol') symbol: nftUtils.allowedSymbol,
   ) {
     return this.dataService.nftData(tokenAddr, tokenId, symbol);
@@ -32,7 +32,7 @@ export class NftController {
   @Get('search')
   async searchNFTs(
     @Query('keyword') keyword: string,
-    @Query('symbol') symbol?: nftUtils.allowedSymbol,
+    @Query('symbol') symbol: nftUtils.allowedSymbol,
     @Query('filter') filter?: nftUtils.filterType,
   ) {
     return this.searchService.searchNFTs(keyword, symbol, filter);
