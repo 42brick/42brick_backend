@@ -1,18 +1,41 @@
 name: remote ssh command for deploy
 on:
-    push:
-        branches: [main]
+  push:
+    branches: [main]
 jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        steps:
-            - name: executing remote ssh commands using key
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.HOST }}
-                  username: ${{ secrets.USERNAME }}
-                  key: ${{ secrets.KEY }}
-                  port: ${{ secrets.PORT }}
-                  script: |
-                      ./deploy.sh
+  nestjs_CI:
+    name: NestJS CI
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          nod-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Test unit
+        run: npm run test
+      - name: Test e2e
+        run: npm run test:e2e
+      - name: Build
+        run: npm run build
+
+  nestjs_CD:
+    needs: test
+    name: NestJS CD
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ./deploy.sh
