@@ -1,5 +1,9 @@
-/* eslint-disable prettier/prettier */
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
 import * as dotenv from 'dotenv';
@@ -19,15 +23,9 @@ export class SearchService {
     filter?: nftUtils.filterType,
   ) {
     let result: unknown;
-    let flag = false;
-
-    nftUtils.is_valid_symbol(symbol);
-    nftUtils.is_valid_keyword(keyword);
-    if (filter)
-      flag = nftUtils.is_valid_filter(filter);
 
     try {
-      if (flag) {
+      if (filter) {
         result = await Moralis.EvmApi.token.searchNFTs({
           chain: nftUtils.symbol_to_symbol(symbol),
           q: keyword,
@@ -54,19 +52,13 @@ export class SearchService {
       } else if (e['code'] && e['code'] === 'C0005') {
         throw new BadRequestException('Invalid address provided');
       }
-      throw new BadRequestException();
+      throw new InternalServerErrorException();
     }
   }
 
   async searchAllNFTs(keyword: string, filter?: nftUtils.filterType) {
-    let flag = false;
-
-    nftUtils.is_valid_keyword(keyword);
-    if (filter)
-      flag = nftUtils.is_valid_filter(filter);
-
     try {
-      if (flag) {
+      if (filter) {
         const ethNFTs = await Moralis.EvmApi.token.searchNFTs({
           chain: EvmChain.ETHEREUM,
           q: keyword,
@@ -163,7 +155,7 @@ export class SearchService {
       } else if (e['code'] && e['code'] === 'C0005') {
         throw new BadRequestException('Invalid address provided');
       }
-      throw new BadRequestException();
+      throw new InternalServerErrorException();
     }
   }
 }
