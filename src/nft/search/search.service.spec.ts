@@ -17,10 +17,12 @@ describe('SearchService', () => {
   });
 
   describe('searchNFTs', () => {
-    it.todo('');
+    it.todo('return 200');
+    it.todo('should throw a BadRequestException');
   });
 
   describe('searchAllNFTs', () => {
-    it.todo('');
+    it.todo('return 200');
+    it.todo('should throw a BadRequestException');
   });
 });

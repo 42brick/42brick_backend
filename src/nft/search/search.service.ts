@@ -22,17 +22,17 @@ export class SearchService {
     symbol: nftUtils.allowedSymbol,
     filter?: nftUtils.filterType,
   ) {
-    let result: unknown;
+    let _result: unknown;
 
     try {
       if (filter) {
-        result = await Moralis.EvmApi.token.searchNFTs({
+        _result = await Moralis.EvmApi.token.searchNFTs({
           chain: nftUtils.symbol_to_symbol(symbol),
           q: keyword,
           filter: filter,
         });
       } else {
-        result = await Moralis.EvmApi.token.searchNFTs({
+        _result = await Moralis.EvmApi.token.searchNFTs({
           chain: nftUtils.symbol_to_symbol(symbol),
           q: keyword,
           filter: 'global',
@@ -42,13 +42,13 @@ export class SearchService {
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: result['_data'],
+        result: _result['_data'],
       };
     } catch (e) {
       if (e['details']) {
-        const status = e['details']['response']['status'];
-        const statusText = e['details']['response']['statusText'];
-        throw new HttpException(statusText, status);
+        const _status = e['details']['response']['status'];
+        const _statusText = e['details']['response']['statusText'];
+        throw new HttpException(_statusText, _status);
       } else if (e['code'] && e['code'] === 'C0005') {
         throw new BadRequestException('Invalid address provided');
       }
@@ -149,9 +149,9 @@ export class SearchService {
       };
     } catch (e) {
       if (e['details']) {
-        const status = e['details']['response']['status'];
-        const statusText = e['details']['response']['statusText'];
-        throw new HttpException(statusText, status);
+        const _status = e['details']['response']['status'];
+        const _statusText = e['details']['response']['statusText'];
+        throw new HttpException(_statusText, _status);
       } else if (e['code'] && e['code'] === 'C0005') {
         throw new BadRequestException('Invalid address provided');
       }

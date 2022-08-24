@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import * as type from '../utils/nft.utils';
 
 @Injectable()
 export class ValidService {
-  is_valid_filter(filter: type.filterType) {
+  is_valid_filter(filter: string) {
     if (
       filter !== 'name' &&
       filter !== 'description' &&
@@ -19,7 +18,11 @@ export class ValidService {
       );
   }
 
-  is_valid_symbol(symbol: type.allowedSymbol) {
+  is_valid_symbol(symbol: string) {
+    if (symbol === undefined)
+      throw new BadRequestException(
+        'Any symbol is not inputed. Please input the symbol. Allowed symbols: eth, bsc, matic, ftm',
+      );
     if (
       symbol !== 'eth' &&
       symbol !== 'bsc' &&
@@ -32,7 +35,7 @@ export class ValidService {
   }
 
   is_valid_keyword(keyword: string) {
-    if (keyword == undefined)
+    if (keyword === undefined)
       throw new BadRequestException(
         'Any keyword is not inputed. Please input the keyword that its minimum length is 3 and maximum length is 256',
       );

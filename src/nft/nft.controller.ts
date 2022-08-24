@@ -8,10 +8,10 @@ import * as nftUtils from './utils/nft.utils';
 @Controller('nft')
 export class NftController {
   constructor(
-    private readonly nftService: NftService,
-    private readonly searchService: SearchService,
-    private readonly dataService: DataService,
-    private readonly validService: ValidService,
+    private readonly _nftService: NftService,
+    private readonly _searchService: SearchService,
+    private readonly _dataService: DataService,
+    private readonly _validService: ValidService,
   ) {}
 
   @Get()
@@ -19,8 +19,8 @@ export class NftController {
     @Query('addr') addr: string,
     @Query('symbol') symbol: nftUtils.allowedSymbol,
   ) {
-    this.validService.is_valid_symbol(symbol);
-    return this.nftService.getNFTs(addr, symbol);
+    this._validService.is_valid_symbol(symbol);
+    return this._nftService.getNFTs(addr, symbol);
   }
 
   @Get('data')
@@ -29,8 +29,8 @@ export class NftController {
     @Query('token-id') tokenId: string,
     @Query('symbol') symbol: nftUtils.allowedSymbol,
   ) {
-    this.validService.is_valid_symbol(symbol);
-    return this.dataService.nftData(tokenAddr, tokenId, symbol);
+    this._validService.is_valid_symbol(symbol);
+    return this._dataService.nftData(tokenAddr, tokenId, symbol);
   }
 
   @Get('search')
@@ -39,9 +39,9 @@ export class NftController {
     @Query('symbol') symbol: nftUtils.allowedSymbol,
     @Query('filter') filter?: nftUtils.filterType,
   ) {
-    this.validService.is_valid_symbol(symbol);
-    if (filter) this.validService.is_valid_filter(filter);
-    return this.searchService.searchNFTs(keyword, symbol, filter);
+    this._validService.is_valid_symbol(symbol);
+    if (filter) this._validService.is_valid_filter(filter);
+    return this._searchService.searchNFTs(keyword, symbol, filter);
   }
 
   @Get('search/all')
@@ -49,7 +49,7 @@ export class NftController {
     @Query('keyword') keyword: string,
     @Query('filter') filter?: nftUtils.filterType,
   ) {
-    if (filter) this.validService.is_valid_filter(filter);
-    return this.searchService.searchAllNFTs(keyword, filter);
+    if (filter) this._validService.is_valid_filter(filter);
+    return this._searchService.searchAllNFTs(keyword, filter);
   }
 }

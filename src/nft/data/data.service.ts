@@ -22,7 +22,7 @@ export class DataService {
     symbol: nftUtils.allowedSymbol,
   ) {
     try {
-      const result = await Moralis.EvmApi.token.getTokenIdMetadata({
+      const _result = await Moralis.EvmApi.token.getTokenIdMetadata({
         address: tokenAddr,
         chain: nftUtils.symbol_to_symbol(symbol),
         tokenId: tokenId,
@@ -31,13 +31,13 @@ export class DataService {
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: result['_data'],
+        result: _result['_data'],
       };
     } catch (e) {
       if (e['details']) {
-        const status = e['details']['response']['status'];
-        const statusText = e['details']['response']['statusText'];
-        throw new HttpException(statusText, status);
+        const _status = e['details']['response']['status'];
+        const _statusText = e['details']['response']['statusText'];
+        throw new HttpException(_statusText, _status);
       } else if (e['code'] && e['code'] === 'C0005') {
         throw new BadRequestException('Invalid address provided');
       }

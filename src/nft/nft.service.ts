@@ -18,7 +18,7 @@ Moralis.start({
 export class NftService {
   async getNFTs(addr: string, symbol: nftUtils.allowedSymbol) {
     try {
-      const result = await Moralis.EvmApi.account.getNFTs({
+      const _result = await Moralis.EvmApi.account.getNFTs({
         chain: nftUtils.symbol_to_symbol(symbol),
         address: addr,
       });
@@ -26,13 +26,13 @@ export class NftService {
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: result['_data'],
+        result: _result['_data'],
       };
     } catch (e) {
       if (e['details']) {
-        const status = e['details']['response']['status'];
-        const statusText = e['details']['response']['statusText'];
-        throw new HttpException(statusText, status);
+        const _status = e['details']['response']['status'];
+        const _statusText = e['details']['response']['statusText'];
+        throw new HttpException(_statusText, _status);
       } else if (e['code'] && e['code'] === 'C0005') {
         throw new BadRequestException('Invalid address provided');
       }

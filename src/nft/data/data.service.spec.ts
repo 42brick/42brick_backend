@@ -17,6 +17,7 @@ describe('DataService', () => {
   });
 
   describe('nftDtat', () => {
-    it.todo('');
+    it.todo('return object');
+    it.todo('should throw a BadRequestException');
   });
 });
