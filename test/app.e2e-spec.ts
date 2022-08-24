@@ -19,6 +19,26 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect('Welcome to 42brick API');
+  });
+
+  describe('/nft', () => {
+    it.todo('GET 200');
+    it.todo('GET 400');
+  });
+
+  describe('/nft/data', () => {
+    it.todo('GET 200');
+    it.todo('GET 400');
+  });
+
+  describe('/nft/search', () => {
+    it.todo('GET 200');
+    it.todo('GET 400');
+  });
+
+  describe('/nft/search/all', () => {
+    it.todo('GET 200');
+    it.todo('GET 400');
   });
 });

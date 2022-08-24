@@ -15,4 +15,12 @@ describe('SearchService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  describe('searchNFTs', () => {
+    it.todo('');
+  });
+
+  describe('searchAllNFTs', () => {
+    it.todo('');
+  });
 });

@@ -15,4 +15,8 @@ describe('DataService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  describe('nftDtat', () => {
+    it.todo('');
+  });
 });

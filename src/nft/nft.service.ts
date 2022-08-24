@@ -12,13 +12,19 @@ Moralis.start({
 @Injectable()
 export class NftService {
   async getNFTs(addr: string, symbol: nftUtils.allowedSymbol) {
-    let result: unknown;
+    nftUtils.is_valid_symbol(symbol);
 
     try {
-      result = await Moralis.EvmApi.account.getNFTs({
+      const result = await Moralis.EvmApi.account.getNFTs({
         chain: nftUtils.symbol_to_symbol(symbol),
         address: addr,
       });
+
+      return {
+        chain: nftUtils.symbol_to_chain(symbol),
+        symbol: symbol,
+        result: result['_data'],
+      };
     } catch (e) {
       if (e['details']) {
         const status = e['details']['response']['status'];
@@ -29,11 +35,5 @@ export class NftService {
       }
       throw new BadRequestException();
     }
-
-    return {
-      chain: nftUtils.symbol_to_chain(symbol),
-      symbol: symbol,
-      result: result['_data'],
-    };
   }
 }
