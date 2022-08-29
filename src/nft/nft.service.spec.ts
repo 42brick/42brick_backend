@@ -17,7 +17,22 @@ describe('NftService', () => {
   });
 
   describe('getNFTs', () => {
-    it.todo('return object');
-    it.todo('should throw a BadRequestExceoption');
+    describe('should not throw a BadRequestException', () => {
+      const _addr = '0x49664808c7AF1a5ce04DEc18563cd5A7cc03a73a';
+      const _eth = 'eth';
+      it.todo('Enter the correct argument');
+      it('The cursor is undefined', () => {
+        const _cursorUndefined = service.getNFTs(_addr, _eth, undefined, 20);
+        expect(_cursorUndefined).toBeInstanceOf(Object);
+      });
+      it.todo('The limit is undefined');
+      it('The cursor and limit are undefined', () => {
+        const _twoUndefined = service.getNFTs(_addr, _eth);
+        expect(_twoUndefined).toBeInstanceOf(Object);
+      });
+    });
+    describe('should throw a BadRequestExceoption', () => {
+      it.todo('The addr is invalid address');
+    });
   });
 });

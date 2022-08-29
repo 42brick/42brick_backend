@@ -45,7 +45,7 @@ export class NftController {
     @Query('limit') limit?: number,
   ) {
     this._validService.is_valid_symbol(symbol);
-    if (filter) this._validService.is_valid_filter(filter);
+    this._validService.is_valid_filter(filter);
     this._validService.is_valid_limit(limit);
     return this._searchService.searchNFTs(
       keyword,
@@ -63,7 +63,7 @@ export class NftController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: number,
   ) {
-    if (filter) this._validService.is_valid_filter(filter);
+    this._validService.is_valid_filter(filter);
     this._validService.is_valid_limit(limit);
     return this._searchService.searchAllNFTs(keyword, filter, cursor, limit);
   }
