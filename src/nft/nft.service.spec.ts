@@ -17,8 +17,7 @@ describe('NftService', () => {
   });
 
   describe('getNFTs', () => {
-    it.todo('');
-    it.todo('should throw a error code BadRequestExceoption');
+    it.todo('return object');
     it.todo('should throw a BadRequestExceoption');
   });
 });
