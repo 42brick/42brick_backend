@@ -19,57 +19,59 @@ describe('ValidService', () => {
 
   describe('is_valid_filter', () => {
     describe('should not throw a BadRequestException', () => {
-      it("when filter is 'name'", () => {
+      it("filter is 'name'", () => {
         expect(service.is_valid_filter('name')).toBe(void 0);
       });
-      it("when filter is 'description'", () => {
+      it("filter is 'description'", () => {
         expect(service.is_valid_filter('description')).toBe(void 0);
       });
-      it("when filter is 'attributes'", () => {
+      it("filter is 'attributes'", () => {
         expect(service.is_valid_filter('attributes')).toBe(void 0);
       });
-      it("when filter is 'global'", () => {
+      it("filter is 'global'", () => {
         expect(service.is_valid_filter('global')).toBe(void 0);
       });
-      it("when filter is 'name,description'", () => {
+      it("filter is 'name,description'", () => {
         expect(service.is_valid_filter('name,description')).toBe(void 0);
       });
-      it("when filter is 'name,attributes'", () => {
+      it("filter is 'name,attributes'", () => {
         expect(service.is_valid_filter('name,attributes')).toBe(void 0);
       });
-      it("when filter is 'description,attributes'", () => {
+      it("filter is 'description,attributes'", () => {
         expect(service.is_valid_filter('description,attributes')).toBe(void 0);
       });
-      it("when filter is 'name,description,attributes'", () => {
+      it("filter is 'name,description,attributes'", () => {
         // eslint-disable-next-line prettier/prettier
         expect(service.is_valid_filter('name,description,attributes')).toBe(void 0);
       });
     });
 
-    it('should throw a BadRequestException', () => {
-      try {
-        service.is_valid_filter('hello');
-      } catch (e) {
-        expect(e).toBeInstanceOf(BadRequestException);
-        expect(e.message).toEqual(
-          'You cannot use this filter. Please check again. Current filter: hello',
-        );
-      }
+    describe('should throw a BadRequestException', () => {
+      it("filter is 'hello'", () => {
+        try {
+          service.is_valid_filter('hello');
+        } catch (e) {
+          expect(e).toBeInstanceOf(BadRequestException);
+          expect(e.message).toEqual(
+            'You cannot use this filter. Please check again. Current filter: hello',
+          );
+        }
+      });
     });
   });
 
   describe('is_valid_symbol', () => {
     describe('should not throw a BadRequestException', () => {
-      it("when filter is 'eth'", () => {
+      it("filter is 'eth'", () => {
         expect(service.is_valid_symbol('eth')).toBe(void 0);
       });
-      it("when filter is 'bsc'", () => {
+      it("filter is 'bsc'", () => {
         expect(service.is_valid_symbol('bsc')).toBe(void 0);
       });
-      it("when filter is 'matic'", () => {
+      it("filter is 'matic'", () => {
         expect(service.is_valid_symbol('matic')).toBe(void 0);
       });
-      it("when filter is 'ftm'", () => {
+      it("filter is 'ftm'", () => {
         expect(service.is_valid_symbol('ftm')).toBe(void 0);
       });
     });
@@ -99,7 +101,11 @@ describe('ValidService', () => {
   });
 
   describe('is_valid_keyword', () => {
-    it.todo('should not throw a BadRequestException');
+    describe('should not throw a BadRequestException', () => {
+      it('keyword is hello', () => {
+        expect(service.is_valid_keyword('hello')).toBe(void 0);
+      });
+    });
     describe('should throw a BadRequestException', () => {
       it('keyword is undefined', () => {
         try {
@@ -130,6 +136,46 @@ describe('ValidService', () => {
           expect(e).toBeInstanceOf(BadRequestException);
           expect(e.message).toEqual(
             'keyword length is bigger than 256. Please try again to input the keyword that its minimum length is 3 and maximum length is 256',
+          );
+        }
+      });
+    });
+  });
+
+  describe('is_valid_limit', () => {
+    describe('should not throw a BadRequestException', () => {
+      it('limit > 0', () => {
+        expect(service.is_valid_limit(300)).toBe(void 0);
+      });
+    });
+    describe('should throw a BadRequestException', () => {
+      it('limit === 0', () => {
+        try {
+          service.is_valid_limit(0);
+        } catch (e) {
+          expect(e).toBeInstanceOf(BadRequestException);
+          expect(e.message).toEqual(
+            'limit have to bigger than 0. Please check again. Current limit: 0',
+          );
+        }
+      });
+      it('limit <= 0', () => {
+        try {
+          service.is_valid_limit(-100);
+        } catch (e) {
+          expect(e).toBeInstanceOf(BadRequestException);
+          expect(e.message).toEqual(
+            'limit have to bigger than 0. Please check again. Current limit: -100',
+          );
+        }
+      });
+      it('limit is float', () => {
+        try {
+          service.is_valid_limit(12.345);
+        } catch (e) {
+          expect(e).toBeInstanceOf(BadRequestException);
+          expect(e.message).toEqual(
+            'limit is not integer. Please check again. Current limit: 12.345',
           );
         }
       });
