@@ -18,9 +18,12 @@ export class NftController {
   async getNFTs(
     @Query('addr') addr: string,
     @Query('symbol') symbol: nftUtils.allowedSymbol,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: number,
   ) {
     this._validService.is_valid_symbol(symbol);
-    return this._nftService.getNFTs(addr, symbol);
+    this._validService.is_valid_limit(limit);
+    return this._nftService.getNFTs(addr, symbol, cursor, limit);
   }
 
   @Get('data')
@@ -38,18 +41,30 @@ export class NftController {
     @Query('keyword') keyword: string,
     @Query('symbol') symbol: nftUtils.allowedSymbol,
     @Query('filter') filter?: nftUtils.filterType,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: number,
   ) {
     this._validService.is_valid_symbol(symbol);
     if (filter) this._validService.is_valid_filter(filter);
-    return this._searchService.searchNFTs(keyword, symbol, filter);
+    this._validService.is_valid_limit(limit);
+    return this._searchService.searchNFTs(
+      keyword,
+      symbol,
+      filter,
+      cursor,
+      limit,
+    );
   }
 
   @Get('search/all')
   async searchAllNFTs(
     @Query('keyword') keyword: string,
     @Query('filter') filter?: nftUtils.filterType,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: number,
   ) {
     if (filter) this._validService.is_valid_filter(filter);
-    return this._searchService.searchAllNFTs(keyword, filter);
+    this._validService.is_valid_limit(limit);
+    return this._searchService.searchAllNFTs(keyword, filter, cursor, limit);
   }
 }

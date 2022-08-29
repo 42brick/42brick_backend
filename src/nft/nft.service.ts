@@ -16,11 +16,18 @@ Moralis.start({
 
 @Injectable()
 export class NftService {
-  async getNFTs(addr: string, symbol: nftUtils.allowedSymbol) {
+  async getNFTs(
+    addr: string,
+    symbol: nftUtils.allowedSymbol,
+    cursor?: string,
+    limit?: number,
+  ) {
     try {
       const _result = await Moralis.EvmApi.account.getNFTs({
         chain: nftUtils.symbol_to_symbol(symbol),
         address: addr,
+        cursor: cursor,
+        limit: limit,
       });
 
       return {

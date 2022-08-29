@@ -21,6 +21,8 @@ export class SearchService {
     keyword: string,
     symbol: nftUtils.allowedSymbol,
     filter?: nftUtils.filterType,
+    cursor?: string,
+    limit?: number,
   ) {
     let _result: unknown;
 
@@ -30,12 +32,16 @@ export class SearchService {
           chain: nftUtils.symbol_to_symbol(symbol),
           q: keyword,
           filter: filter,
+          cursor: cursor,
+          limit: limit,
         });
       } else {
         _result = await Moralis.EvmApi.token.searchNFTs({
           chain: nftUtils.symbol_to_symbol(symbol),
           q: keyword,
           filter: 'global',
+          cursor: cursor,
+          limit: limit,
         });
       }
 
@@ -56,28 +62,41 @@ export class SearchService {
     }
   }
 
-  async searchAllNFTs(keyword: string, filter?: nftUtils.filterType) {
+  async searchAllNFTs(
+    keyword: string,
+    filter?: nftUtils.filterType,
+    cursor?: string,
+    limit?: number,
+  ) {
     try {
       if (filter) {
         const ethNFTs = await Moralis.EvmApi.token.searchNFTs({
           chain: EvmChain.ETHEREUM,
           q: keyword,
           filter: filter,
+          cursor: cursor,
+          limit: limit,
         });
         const bscNFTs = await Moralis.EvmApi.token.searchNFTs({
           chain: EvmChain.BSC,
           q: keyword,
           filter: filter,
+          cursor: cursor,
+          limit: limit,
         });
         const polygonNFTs = await Moralis.EvmApi.token.searchNFTs({
           chain: EvmChain.POLYGON,
           q: keyword,
           filter: filter,
+          cursor: cursor,
+          limit: limit,
         });
         const fantomNFTs = await Moralis.EvmApi.token.searchNFTs({
           chain: EvmChain.FANTOM,
           q: keyword,
           filter: filter,
+          cursor: cursor,
+          limit: limit,
         });
 
         return {
@@ -108,21 +127,29 @@ export class SearchService {
         chain: EvmChain.ETHEREUM,
         q: keyword,
         filter: 'global',
+        cursor: cursor,
+        limit: limit,
       });
       const bscNFTs = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.BSC,
         q: keyword,
         filter: 'global',
+        cursor: cursor,
+        limit: limit,
       });
       const polygonNFTs = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.POLYGON,
         q: keyword,
         filter: 'global',
+        cursor: cursor,
+        limit: limit,
       });
       const fantomNFTs = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.FANTOM,
         q: keyword,
         filter: 'global',
+        cursor: cursor,
+        limit: limit,
       });
 
       return {

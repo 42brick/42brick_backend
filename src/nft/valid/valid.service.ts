@@ -4,6 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 export class ValidService {
   is_valid_filter(filter: string) {
     if (
+      filter &&
       filter !== 'name' &&
       filter !== 'description' &&
       filter !== 'attributes' &&
@@ -47,5 +48,18 @@ export class ValidService {
       throw new BadRequestException(
         'keyword length is bigger than 256. Please try again to input the keyword that its minimum length is 3 and maximum length is 256',
       );
+  }
+
+  is_valid_limit(limit: number) {
+    if (limit) {
+      if (!Number.isInteger(limit))
+        throw new BadRequestException(
+          `limit is not integer. Please check again. Current limit: ${limit}`,
+        );
+      if (limit <= 0)
+        throw new BadRequestException(
+          `limit have to bigger than 0. Please check again. Current limit: ${limit}`,
+        );
+    }
   }
 }
