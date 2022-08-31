@@ -31,7 +31,7 @@ export class ValidService {
       symbol !== 'ftm'
     )
       throw new BadRequestException(
-        `It is not allowed symbol. Please check again. Current symbol: ${symbol}`,
+        `It is not allowed symbol. Please check again. Allowed symbols: eth, bsc, matic, ftm`,
       );
   }
 

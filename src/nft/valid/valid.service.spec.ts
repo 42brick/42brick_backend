@@ -93,7 +93,7 @@ describe('ValidService', () => {
         } catch (e) {
           expect(e).toBeInstanceOf(BadRequestException);
           expect(e.message).toEqual(
-            'It is not allowed symbol. Please check again. Current symbol: btc',
+            'It is not allowed symbol. Please check again. Allowed symbols: eth, bsc, matic, ftm',
           );
         }
       });
