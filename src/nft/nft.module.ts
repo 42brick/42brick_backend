@@ -8,7 +8,13 @@ import { MintService } from './mint/mint.service';
 
 @Module({
   controllers: [NftController],
-  providers: [NftService, SearchService, DataService, ValidService, MintService],
+  providers: [
+    NftService,
+    SearchService,
+    DataService,
+    ValidService,
+    MintService,
+  ],
   imports: [],
 })
 export class NftModule {}
