@@ -155,8 +155,8 @@ contract MintBrickToken is ERC721Enumerable {
         return onSaleNftTokens;
     }
 
-    // 판매 리스트에서 해당 토큰 삭제 함수
-    function removeToken(uint256 tokenId) private {
+    // 판매 취소 함수 및 판매 리스트에서 해당 토큰 삭제 함수
+    function removeToken(uint256 tokenId) public {
         _nftTokenPrices[tokenId] = 0;
 
         for (uint256 i = 0; i < onSaleNftTokenArray.length; i++) {
@@ -201,6 +201,22 @@ contract MintBrickToken is ERC721Enumerable {
         );
 
         // 판매 리스트에서 삭제
+        removeToken(tokenId);
+    }
+
+    // 토큰 삭제 함수
+    function burn(uint256 tokenId) public {
+        address nftTokenOwner = ownerOf(tokenId);
+
+        // 해당 토큰 소유자인지 확인
+        require(nftTokenOwner == msg.sender, 'caller is not nft token owner.');
+        // 해당 주소에게 권한을 받았는지 확인
+        require(
+            isApprovedForAll(nftTokenOwner, address(this)),
+            'nft token owner did not approve token.'
+        );
+
+        _burn(tokenId);
         removeToken(tokenId);
     }
 }
