@@ -10,6 +10,9 @@ contract MintBrickToken is ERC721Enumerable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenId;
 
+    // contract 발행자
+    address payable owner;
+
     // tokenId와 mapping된 token URI
     mapping(uint256 => string) public _tokenURIs;
     // tokenId와 mapping된 token 가격
@@ -18,7 +21,9 @@ contract MintBrickToken is ERC721Enumerable {
     // 판매 등록된 토큰을 저장할 배열
     uint256[] public onSaleNftTokenArray;
 
-    constructor() ERC721('BrickToken', 'BT') {}
+    constructor() ERC721('BrickToken', 'BT') {
+        owner = payable(msg.sender);
+    }
 
     // tokenId에 해당하는 tokenURI를 리턴하는 함수
     function tokenURI(uint256 tokenId)
@@ -125,14 +130,77 @@ contract MintBrickToken is ERC721Enumerable {
     }
 
     // 가격 미포함 판매 등록 리스트를 가져오는 함수
-    function getSaleNftToken() public view returns (uint256[] memory) {}
+    function getSaleNftToken() public view returns (uint256[] memory) {
+        return onSaleNftTokenArray;
+    }
 
     // 가격 포함 판매 등록 리스트를 가져오는 함수
-    function getSaleNftTokens() public view returns (NftTokenData[] memory) {}
+    function getSaleNftTokens() public view returns (NftTokenData[] memory) {
+        uint256[] memory onSaleNftToken = getSaleNftToken();
+        NftTokenData[] memory onSaleNftTokens = new NftTokenData[](
+            onSaleNftToken.length
+        );
+
+        for (uint256 i = 0; i < onSaleNftToken.length; i++) {
+            uint256 tokenId = onSaleNftToken[i];
+            uint256 tokenPrice = getNftTokenPrice(tokenId);
+
+            onSaleNftTokens[i] = NftTokenData(
+                tokenId,
+                tokenURI(tokenId),
+                tokenPrice
+            );
+        }
+
+        return onSaleNftTokens;
+    }
 
     // 판매 리스트에서 해당 토큰 삭제 함수
-    function removeToken(uint256 tokenId) private {}
+    function removeToken(uint256 tokenId) private {
+        _nftTokenPrices[tokenId] = 0;
+
+        for (uint256 i = 0; i < onSaleNftTokenArray.length; i++) {
+            if (_nftTokenPrices[onSaleNftTokenArray[i]] == 0) {
+                onSaleNftTokenArray[i] = onSaleNftTokenArray[
+                    onSaleNftTokenArray.length - 1
+                ];
+                onSaleNftTokenArray.pop();
+            }
+        }
+    }
 
     // 구매 함수
-    function buyNftToken(uint256 tokenId) public payable {}
+    function buyNftToken(uint256 tokenId) public payable {
+        uint256 price = _nftTokenPrices[tokenId];
+        address nftTokenOwner = ownerOf(tokenId);
+
+        // 토큰이 판매되고 있는지 확인
+        require(price > 0, 'nft token not sale.');
+        // 보낸 코인이 책정된 가격 이상인지 확인
+        require(
+            (price * 1001) / 1000 <= msg.value,
+            'caller sent lower than price.'
+        );
+        // 토큰을 구입하는 사람은 원래 구매자와 같지 않은지 확인
+        require(nftTokenOwner != msg.sender, 'caller is nft token owner.');
+        // 해당 주소에게 권한을 받았는지 확인
+        require(
+            isApprovedForAll(nftTokenOwner, address(this)),
+            'nft token owner did not approve token.'
+        );
+
+        payable(nftTokenOwner).transfer(price);
+        payable(owner).transfer(price / 1000);
+        if ((price * 1001) / 1000 < msg.value)
+            payable(msg.sender).transfer(msg.value - ((price * 1001) / 1000));
+
+        IERC721(address(this)).safeTransferFrom(
+            nftTokenOwner,
+            msg.sender,
+            tokenId
+        );
+
+        // 판매 리스트에서 삭제
+        removeToken(tokenId);
+    }
 }
