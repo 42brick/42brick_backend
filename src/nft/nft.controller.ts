@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Post, Query } from '@nestjs/common';
 import { NftService } from './nft.service';
 import { SearchService } from './search/search.service';
 import { DataService } from './data/data.service';
@@ -68,5 +68,10 @@ export class NftController {
     this._validService.is_valid_filter(filter);
     this._validService.is_valid_limit(limit);
     return this._searchService.searchAllNFTs(keyword, filter, cursor, limit);
+  }
+
+  @Post('mint')
+  MintNFTs() {
+    return 'Minted NFTs';
   }
 }
