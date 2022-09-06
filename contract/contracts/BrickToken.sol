@@ -6,7 +6,7 @@ pragma solidity ^0.8.7;
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 
-contract MintBrickToken is ERC721Enumerable {
+contract BrickToken is ERC721Enumerable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenId;
 
