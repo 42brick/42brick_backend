@@ -14,7 +14,7 @@ contract BrickToken is ERC721Enumerable {
     address payable owner;
 
     // tokenId와 mapping된 token URI
-    mapping(uint256 => string) public _tokenURIs;
+    mapping(uint256 => string) public _nftTokenURIs;
     // tokenId와 mapping된 token 가격
     mapping(uint256 => uint256) public _nftTokenPrices;
 
@@ -32,7 +32,7 @@ contract BrickToken is ERC721Enumerable {
         override
         returns (string memory)
     {
-        return _tokenURIs[tokenId];
+        return _nftTokenURIs[tokenId];
     }
 
     // NFT 발생 함수
@@ -40,31 +40,10 @@ contract BrickToken is ERC721Enumerable {
         _tokenId.increment();
         uint256 tokenId = _tokenId.current();
 
-        _tokenURIs[tokenId] = _tokenURI;
-
+        _nftTokenURIs[tokenId] = _tokenURI;
         _mint(msg.sender, tokenId);
 
         return tokenId;
-
-        // string memory json = Base64.encode(
-        //     bytes(
-        //         string(
-        //             abi.encodePacked(
-        //                 '{"name": "Badge #',
-        //                 Strings.toString(tokenId),
-        //                 '", "description": "A concise Hardhat tutorial Badge NFT with on-chain SVG images like look.", "image": "data:image/svg+xml;base64,',
-        //                 Base64.encode(bytes(output)),
-        //                 '"}'
-        //             )
-        //         )
-        //     )
-        // );
-
-        // output = string(
-        //     abi.encodePacked('data:application/json;base64,', json)
-        // );
-
-        // return output;
     }
 
     // 토큰 가격을 가져오는 함수
