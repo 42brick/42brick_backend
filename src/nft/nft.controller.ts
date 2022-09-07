@@ -91,7 +91,7 @@ export class NftController {
       new ParseFilePipeBuilder()
         // 파일 확장자 제한
         .addFileTypeValidator({ fileType: 'jpg' })
-        // 파일 크리 10 MB 제한
+        // 파일 크기 10 MB 제한
         .addMaxSizeValidator({ maxSize: 10485760 }) 
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY })
       // new ParseFilePipeBuilder()
