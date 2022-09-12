@@ -15,7 +15,7 @@ export class SearchController {
     @Query('symbol', SymbolValidationPipe) symbol: allowedSymbol,
     @Query('filter', FilterValidationPipe) filter?: filterType,
     @Query('cursor') cursor?: string,
-    @Query('limit', ParseIntPipe) limit?: number,
+    @Query('limit') limit?: number,
   ) {
     return this._searchService.searchNFTs(
       keyword,

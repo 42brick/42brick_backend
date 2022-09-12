@@ -86,6 +86,7 @@ describe('NftService', () => {
     describe('should throw a BadRequestExceoption', () => {
       it('The addr is invalid address', async () => {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const _invalidAddr = await service.getNFTs('a', _eth);
         } catch (e) {
           expect(e).toBeInstanceOf(BadRequestException);
