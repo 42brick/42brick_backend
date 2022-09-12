@@ -60,8 +60,6 @@ describe('DataService', () => {
           expect(e).toBeInstanceOf(BadRequestException);
         }
       });
-
-      it.todo('Empty token ID');
     });
   });
 });
