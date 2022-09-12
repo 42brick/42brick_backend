@@ -41,4 +41,8 @@ describe('AppController (e2e)', () => {
     it.todo('GET 200');
     it.todo('GET 400');
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });

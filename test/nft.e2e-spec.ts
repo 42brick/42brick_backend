@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
 import { NftModule } from 'src/nft/nft.module';
 
 describe('AppController (e2e)', () => {
@@ -18,5 +17,9 @@ describe('AppController (e2e)', () => {
   describe('/nft', () => {
     it.todo('GET 200');
     it.todo('GET 400');
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });
