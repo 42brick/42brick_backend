@@ -16,7 +16,7 @@ describe('DataService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('nftDtat', () => {
+  describe('nftData', () => {
     it.todo('return object');
     it.todo('should throw a BadRequestException');
   });
