@@ -8,23 +8,23 @@ import {
 @Injectable()
 export class SymbolValidationPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    this.isValidSymbol(value);
+    if (value === undefined)
+      throw new BadRequestException(
+        'Any symbol is not inputed. Please input the symbol. Allowed symbols: eth, bsc, matic, ftm',
+      );
+    if (!this.isValidSymbol(value))
+      throw new BadRequestException(
+        `It is not allowed symbol. Please check again. Allowed symbols: eth, bsc, matic, ftm`,
+      );
     return value;
   }
 
   private isValidSymbol(symbol: any) {
-    if (symbol === undefined)
-      throw new BadRequestException(
-        'Any symbol is not inputed. Please input the symbol. Allowed symbols: eth, bsc, matic, ftm',
-      );
-    if (
-      symbol !== 'eth' &&
-      symbol !== 'bsc' &&
-      symbol !== 'matic' &&
-      symbol !== 'ftm'
-    )
-      throw new BadRequestException(
-        `It is not allowed symbol. Please check again. Allowed symbols: eth, bsc, matic, ftm`,
-      );
+    return (
+      symbol === 'eth' ||
+      symbol === 'bsc' ||
+      symbol === 'matic' ||
+      symbol === 'ftm'
+    );
   }
 }
