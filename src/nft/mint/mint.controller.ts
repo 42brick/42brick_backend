@@ -4,6 +4,7 @@ import {
   Body,
   UseInterceptors,
   UploadedFile,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MintService } from './mint.service';
@@ -17,7 +18,8 @@ export class MintController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   MintNFTs(
-    @UploadedFile(CustomParseFileValidationPipe) file: Express.Multer.File,
+    @UploadedFile(ParseFilePipe, CustomParseFileValidationPipe)
+    file: Express.Multer.File,
     @Body() mintNft: MintNftDto,
   ) {
     this._mintService.TestFunc(file, mintNft);

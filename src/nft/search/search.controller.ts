@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { allowedSymbol, filterType } from '../utils/nft.utils';
 import { SymbolValidationPipe } from '../pipes/symbol-validation.pipe';
@@ -15,7 +15,7 @@ export class SearchController {
     @Query('symbol', SymbolValidationPipe) symbol: allowedSymbol,
     @Query('filter', FilterValidationPipe) filter?: filterType,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this._searchService.searchNFTs(
       keyword,
@@ -31,7 +31,7 @@ export class SearchController {
     @Query('keyword', KeywordValidationPipe) keyword: string,
     @Query('filter', FilterValidationPipe) filter?: filterType,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this._searchService.searchAllNFTs(keyword, filter, cursor, limit);
   }
