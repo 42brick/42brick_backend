@@ -6,6 +6,8 @@ jobs:
   nestjs_CI:
     name: NestJS CI
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
     strategy:
       matrix:
         node-version: [16.x]
