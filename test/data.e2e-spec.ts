@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { DataModule } from 'src/nft/data/data.module';
+import { DataModule } from '../src/nft/data/data.module';
 
 describe('DataController (e2e)', () => {
   let app: INestApplication;

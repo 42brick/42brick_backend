@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { NftModule } from 'src/nft/nft.module';
+import { NftModule } from '../src/nft/nft.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

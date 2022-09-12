@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { SearchModule } from 'src/nft/search/search.module';
+import { SearchModule } from '../src/nft/search/search.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
