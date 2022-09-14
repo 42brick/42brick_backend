@@ -8,7 +8,7 @@ dotenv.config();
 
 @Injectable()
 export class MintService {
-  //   private readonly web3 = new Web3(config.url);
+  private readonly web3 = new Web3(process.env.TEST_DEPLOYED_ADDRESS);
   //   private readonly brickContract = new web3.eth.Contract(
   //     DEPLOYED_ABI,
   //     process.env.DEPLOYED_ADDRESS,
@@ -34,20 +34,20 @@ export class MintService {
   }
 
   TestFunc(file, mintNft: MintNftDto) {
-    // console.log(file);
-    // console.log(file.fieldname);
-    // console.log(file.originalname);
-    // console.log(file.mimetype);
-    // console.log(file.buffer);
-    // console.log(typeof file.buffer[0]);
-    // console.log(file.size);
-    // console.log(mintNft);
-    // console.log(mintNft.external_url);
-    // const testObj = {
-    // 	name: mintNft.name,
-    // 	description: mintNft.description,
-    // 	external_url: mintNft.external_url ? mintNft.external_url : null,
-    // };
-    // console.log(testObj);
+    console.log(file);
+    console.log(file.fieldname);
+    console.log(file.originalname);
+    console.log(file.mimetype);
+    console.log(file.buffer);
+    console.log(typeof file.buffer[0]);
+    console.log(file.size);
+    console.log(mintNft);
+    console.log(mintNft.external_url);
+    const testObj = {
+      name: mintNft.name,
+      description: mintNft.description,
+      external_url: mintNft.external_url ? mintNft.external_url : null,
+    };
+    console.log(testObj);
   }
 }
