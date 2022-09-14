@@ -8,7 +8,6 @@ import {
 @Injectable()
 export class CustomParseFileValidationPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    console.log(value);
     if (!this.isValidFileSize(value.size))
       throw new BadRequestException(
         'The file is too big! File size is below than 10 MB.',

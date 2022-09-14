@@ -21,12 +21,15 @@ export class MintService {
     });
     const _metaData = await _client.store({
       name: mintNft.name,
+      description: mintNft.description ? mintNft.description : '',
       image: _file,
-      image_name: file.originalname,
-      type: file.mimetype,
-      external_url: mintNft.external_url ? mintNft.external_url : null,
-      description: mintNft.description ? mintNft.description : null,
+      decimals: 1,
+      properties: {
+        type: file.mimetype,
+        external_url: mintNft.external_url ? mintNft.external_url : '',
+      },
     });
+    console.log(_metaData);
     console.log(_metaData.url);
   }
 
