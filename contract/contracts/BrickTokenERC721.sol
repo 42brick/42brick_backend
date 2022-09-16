@@ -58,11 +58,6 @@ contract BrickTokenERC721 is ERC721Enumerable {
         uint256 price;
     }
 
-    // 가장 최군에 발행한 토큰 ID를 리턴하는 함수
-    function getRecentTokenId() public view returns (uint256) {
-        return _tokenId.current();
-    }
-
     // 자신이 발행한 토큰 리스트를 리턴하는 함수
     function getNftTokens(address nftTokenOwner)
         public
