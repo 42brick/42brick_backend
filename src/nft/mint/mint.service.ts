@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MintNftDto } from './dto/mint-nft.dto';
 import * as dotenv from 'dotenv';
-import { NFTStorage, File } from 'nft.storage';
+import { Web3Storage, File } from 'web3.storage';
 import Web3 from 'web3';
 import { readFileSync } from 'fs';
 
@@ -38,56 +38,34 @@ export class MintService {
 
   async MinERC721Nft(file: Express.Multer.File, mintNft: MintNftDto) {
     this.initWeb3();
-    const _client = new NFTStorage({ token: process.env.NFT_STORAGE_TOKEN });
+    const _client = new Web3Storage({ token: process.env.WEB3_STORAGE_TOKEN });
     const _file = new File([file.buffer], file.originalname, {
       type: file.mimetype,
     });
-    const _metaData = await _client.store({
+    const _cid = await _client.put([_file]);
+    const _metaData = {
       name: mintNft.name,
       description: mintNft.description ? mintNft.description : null,
-      image: _file,
+      image: 'ipfs://' + _cid + '/' + file.originalname,
       decimals: 1,
       properties: {
         type: file.mimetype,
         external_url: mintNft.external_url ? mintNft.external_url : null,
       },
-    });
-    console.log(_metaData);
-    console.log(_metaData.url);
-    const _result = await this.contract.methods.mintNFT(_metaData.url).send({
-      from: '0x91c44006684a559F56dCF7bf0EF4ca18F42DE2AD',
-      gas: '1000000',
-    });
+    };
+    const _buffer = Buffer.from(JSON.stringify(_metaData));
+    const _metaDataCid = await _client.put([
+      new File([_buffer], 'metadata.json'),
+    ]);
+    console.log(_metaDataCid);
+    console.log('ipfs://' + _metaDataCid + '/metadata.json');
+
+    const _result = await this.contract.methods
+      .mintNFT('ipfs://' + _metaDataCid + '/metadata.json')
+      .send({
+        from: '0x91c44006684a559F56dCF7bf0EF4ca18F42DE2AD',
+        gas: '1000000',
+      });
     console.log(_result);
-  }
-
-  async TestFunc(file, mintNft: MintNftDto) {
-    // console.log(this.contractABI);
-    // console.log(this.contract);
-    this.web3 = new Web3(new Web3.providers.HttpProvider(this.url));
-    // console.log(this.contractABI);
-    // const contract = new this.web3.eth.Contract(
-    //   this.contractABI,
-    //   process.env.TEST_DEPLOYED_ADDRESS,
-    // );
-    // console.log(contract);
-    // const id = await contract.methods.totalSupply().call();
-    // console.log(id);
-
-    // console.log(file);
-    // console.log(file.fieldname);
-    // console.log(file.originalname);
-    // console.log(file.mimetype);
-    // console.log(file.buffer);
-    // console.log(typeof file.buffer[0]);
-    // console.log(file.size);
-    // console.log(mintNft);
-    // console.log(mintNft.external_url);
-    // const testObj = {
-    //   name: mintNft.name,
-    //   description: mintNft.description,
-    //   external_url: mintNft.external_url ? mintNft.external_url : null,
-    // };
-    // console.log(testObj);
   }
 }

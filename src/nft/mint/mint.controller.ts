@@ -22,7 +22,6 @@ export class MintController {
     file: Express.Multer.File,
     @Body() mintNft: MintNftDto,
   ) {
-    // this._mintService.TestFunc(file, mintNft);
     this._mintService.MinERC721Nft(file, mintNft);
     return 'object about created NFT';
   }
