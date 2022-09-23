@@ -81,7 +81,7 @@ export class MintService {
     const _metaData = {
       name: mintNft.name,
       description: mintNft.description ? mintNft.description : null,
-      image: 'https://' + _cid + '.ipfs.w3s.link/' + file.originalname,
+      image: 'https://ipfs.io/ipfs/' + _cid + '/' + file.originalname,
       decimals: 1,
       properties: {
         type: file.mimetype,
@@ -94,7 +94,7 @@ export class MintService {
     ]);
     console.log(_metaDataCid);
     return {
-      url: 'https://' + _metaDataCid + '.ipfs.nftstorage.link/metadata.json',
+      url: 'https://ipfs.io/ipfs/' + _metaDataCid + 'metadata.json',
     };
   }
 }
