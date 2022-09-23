@@ -36,13 +36,15 @@ export class MintService {
     );
   }
 
-  async MinERC721Nft(file: Express.Multer.File, mintNft: MintNftDto) {
+  async MintERC721Nft(file: Express.Multer.File, mintNft: MintNftDto) {
     this.initWeb3();
-    const _client = new Web3Storage({ token: process.env.WEB3_STORAGE_TOKEN });
+    const _client = new Web3Storage({
+      token: process.env.WEB3_STORAGE_TOKEN,
+    });
     const _file = new File([file.buffer], file.originalname, {
       type: file.mimetype,
     });
-    const _cid = await _client.put([_file]);
+    const _cid = await _client.put([_file], { name: 'hello file' });
     const _metaData = {
       name: mintNft.name,
       description: mintNft.description ? mintNft.description : null,
@@ -67,5 +69,32 @@ export class MintService {
         gas: '1000000',
       });
     console.log(_result);
+  }
+
+  async MakeIpfsCid(file: Express.Multer.File, mintNft: MintNftDto) {
+    const _client = new Web3Storage({ token: process.env.WEB3_STORAGE_TOKEN });
+    const _file = new File([file.buffer], file.originalname, {
+      type: file.mimetype,
+    });
+    const _cid = await _client.put([_file]);
+
+    const _metaData = {
+      name: mintNft.name,
+      description: mintNft.description ? mintNft.description : null,
+      image: 'https://' + _cid + '.ipfs.w3s.link/' + file.originalname,
+      decimals: 1,
+      properties: {
+        type: file.mimetype,
+        external_url: mintNft.external_url ? mintNft.external_url : null,
+      },
+    };
+    const _buffer = Buffer.from(JSON.stringify(_metaData));
+    const _metaDataCid = await _client.put([
+      new File([_buffer], 'metadata.json'),
+    ]);
+    console.log(_metaDataCid);
+    return {
+      url: 'https://' + _metaDataCid + '.ipfs.nftstorage.link/metadata.json',
+    };
   }
 }
