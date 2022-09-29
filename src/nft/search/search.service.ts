@@ -34,7 +34,7 @@ export class SearchService {
         transaction_minted: element.transaction_minted,
         last_token_uri_sync: element.last_token_uri_sync,
         last_metadata_sync: element.last_metadata_sync,
-        created_at: element.createdAt,
+        created_at: element.created_at,
       });
     });
     return _newResult;
