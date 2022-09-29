@@ -1,4 +1,4 @@
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { allowedSymbol, filterType } from '../utils/nft.utils';
 import { SymbolValidationPipe } from '../pipes/symbol-validation.pipe';
