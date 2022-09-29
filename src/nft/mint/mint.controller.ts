@@ -22,7 +22,6 @@ export class MintController {
     file: Express.Multer.File,
     @Body() mintNft: MintNftDto,
   ) {
-    // this._mintService.MintERC721Nft(file, mintNft);
-    return this._mintService.MakeIpfsCid(file, mintNft);
+    return this._mintService.CreateIpfsCid(file, mintNft);
   }
 }

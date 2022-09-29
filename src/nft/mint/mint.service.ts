@@ -15,10 +15,8 @@ export class MintService {
   private web3 = undefined;
   private web3Provider = undefined;
   private contract = undefined;
-  // private chairPerson = undefined;
-  // private currentAccount = undefined;
 
-  private async initWeb3() {
+  private async totalSupply() {
     // 주입된 web3 instance가 있는지 확인
     if (typeof this.web3 !== 'undefined') {
       this.web3Provider = this.web3.currentProvider;
@@ -34,46 +32,17 @@ export class MintService {
       _contractABI,
       process.env.TEST_DEPLOYED_ADDRESS,
     );
+
+    const _returnValue = await this.contract.methods.totalSupply().call();
+    return _returnValue;
   }
 
-  async MintERC721Nft(file: Express.Multer.File, mintNft: MintNftDto) {
-    this.initWeb3();
+  async CreateIpfsCid(file: Express.Multer.File, mintNft: MintNftDto) {
+    const _tokenId = Number(await this.totalSupply()) + 1;
     const _client = new Web3Storage({
       token: process.env.WEB3_STORAGE_TOKEN,
     });
-    const _file = new File([file.buffer], file.originalname, {
-      type: file.mimetype,
-    });
-    const _cid = await _client.put([_file], { name: 'hello file' });
-    const _metaData = {
-      name: mintNft.name,
-      description: mintNft.description ? mintNft.description : null,
-      image: 'ipfs://' + _cid + '/' + file.originalname,
-      decimals: 1,
-      properties: {
-        type: file.mimetype,
-        external_url: mintNft.external_url ? mintNft.external_url : null,
-      },
-    };
-    const _buffer = Buffer.from(JSON.stringify(_metaData));
-    const _metaDataCid = await _client.put([
-      new File([_buffer], 'metadata.json'),
-    ]);
-    console.log(_metaDataCid);
-    console.log('ipfs://' + _metaDataCid + '/metadata.json');
-
-    const _result = await this.contract.methods
-      .mintNFT('ipfs://' + _metaDataCid + '/metadata.json')
-      .send({
-        from: '0x91c44006684a559F56dCF7bf0EF4ca18F42DE2AD',
-        gas: '1000000',
-      });
-    console.log(_result);
-  }
-
-  async MakeIpfsCid(file: Express.Multer.File, mintNft: MintNftDto) {
-    const _client = new Web3Storage({ token: process.env.WEB3_STORAGE_TOKEN });
-    const _file = new File([file.buffer], file.originalname, {
+    const _file = new File([file.buffer], String(_tokenId), {
       type: file.mimetype,
     });
     const _cid = await _client.put([_file]);
@@ -81,7 +50,7 @@ export class MintService {
     const _metaData = {
       name: mintNft.name,
       description: mintNft.description ? mintNft.description : null,
-      image: 'https://ipfs.io/ipfs/' + _cid + '/' + file.originalname,
+      image: `ipfs://${_cid}/${_tokenId}`,
       decimals: 1,
       properties: {
         type: file.mimetype,
@@ -89,12 +58,10 @@ export class MintService {
       },
     };
     const _buffer = Buffer.from(JSON.stringify(_metaData));
-    const _metaDataCid = await _client.put([
-      new File([_buffer], 'metadata.json'),
-    ]);
-    console.log(_metaDataCid);
+    // eslint-disable-next-line prettier/prettier
+    const _metaDataCid = await _client.put([new File([_buffer], `${_tokenId}.json`)]);
     return {
-      url: 'https://ipfs.io/ipfs/' + _metaDataCid + 'metadata.json',
+      metadata_uri: `ipfs://${_metaDataCid}/${_tokenId}.json`,
     };
   }
 }
