@@ -30,10 +30,37 @@ export class NftService {
         limit: limit,
       });
 
+      const _newResult = [];
+      _result['_data'].result.forEach((element) => {
+        _newResult.push({
+          token_address: element.token_address,
+          token_id: element.token_id,
+          amount: element.amount,
+          owner_of: element.owner_of,
+          token_hash: element.token_hash,
+          block_number_minted: element.block_number_minted,
+          block_number: element.block_number,
+          contract_type: element.contract_type,
+          name: element.name,
+          symbol: element.symbol,
+          token_uri: element.token_uri,
+          image: element.metadata ? JSON.parse(element.metadata).image : null,
+          metadata: element.metadata,
+          last_token_uri_sync: element.last_token_uri_sync,
+          last_metadata_sync: element.last_token_uri_sync,
+        });
+      });
+
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: _result['_data'],
+        result: {
+          total: _result['_data'].total,
+          page: _result['_data'].page,
+          page_size: _result['_data'].page_size,
+          cursor: _result['_data'].cursor,
+          result: _newResult,
+        },
       };
     } catch (e) {
       if (e['details']) {

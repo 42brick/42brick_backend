@@ -17,6 +17,29 @@ Moralis.start({
 
 @Injectable()
 export class SearchService {
+  private createResult(array: any[]) {
+    const _newResult = [];
+    array.forEach((element) => {
+      _newResult.push({
+        token_id: element.token_id,
+        token_address: element.token_address,
+        token_uri: element.token_uri,
+        name: element.metadata ? JSON.parse(element.metadata).name : null,
+        image: element.metadata ? JSON.parse(element.metadata).image : null,
+        metadata: element.metadata,
+        contract_type: element.contract_type,
+        token_hash: element.token_hash,
+        minter_address: element.minter_address,
+        block_number_minted: element.block_number_minted,
+        transaction_minted: element.transaction_minted,
+        last_token_uri_sync: element.last_token_uri_sync,
+        last_metadata_sync: element.last_metadata_sync,
+        created_at: element.createdAt,
+      });
+    });
+    return _newResult;
+  }
+
   async searchNFTs(
     keyword: string,
     symbol: nftUtils.allowedSymbol,
@@ -36,7 +59,13 @@ export class SearchService {
       return {
         chain: nftUtils.symbol_to_chain(symbol),
         symbol: symbol,
-        result: _result['_data'],
+        result: {
+          total: _result['_data'].total,
+          page: _result['_data'].page,
+          page_size: _result['_data'].page_size,
+          cursor: _result['_data'].cursor,
+          result: this.createResult(_result['_data'].result),
+        },
       };
     } catch (e) {
       if (e['details']) {
@@ -57,28 +86,28 @@ export class SearchService {
     limit?: number,
   ) {
     try {
-      const ethNFTs = await Moralis.EvmApi.token.searchNFTs({
+      const _ethNFTs = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.ETHEREUM,
         q: keyword,
         filter: filter ? filter : 'global',
         cursor: cursor,
         limit: limit,
       });
-      const bscNFTs = await Moralis.EvmApi.token.searchNFTs({
+      const _bscNFTs = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.BSC,
         q: keyword,
         filter: filter ? filter : 'global',
         cursor: cursor,
         limit: limit,
       });
-      const polygonNFTs = await Moralis.EvmApi.token.searchNFTs({
+      const _polygonNFTs = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.POLYGON,
         q: keyword,
         filter: filter ? filter : 'global',
         cursor: cursor,
         limit: limit,
       });
-      const fantomNFTs = await Moralis.EvmApi.token.searchNFTs({
+      const _fantomNFTs = await Moralis.EvmApi.token.searchNFTs({
         chain: EvmChain.FANTOM,
         q: keyword,
         filter: filter ? filter : 'global',
@@ -90,22 +119,47 @@ export class SearchService {
         Ethereum: {
           chain: 'Ethereum',
           symbol: 'eth',
-          result: ethNFTs['_data'],
+          result: {
+            total: _ethNFTs['_data'].total,
+            page: _ethNFTs['_data'].page,
+            page_size: _ethNFTs['_data'].page_size,
+            cursor: _ethNFTs['_data'].cursor,
+            result: this.createResult(_ethNFTs['_data'].result),
+          },
         },
         BSC: {
           chain: 'Binance Smart Chain',
           symbol: 'bsc',
-          result: bscNFTs['_data'],
+
+          result: {
+            total: _bscNFTs['_data'].total,
+            page: _bscNFTs['_data'].page,
+            page_size: _bscNFTs['_data'].page_size,
+            cursor: _bscNFTs['_data'].cursor,
+            result: this.createResult(_bscNFTs['_data'].result),
+          },
         },
         Polygon: {
           chain: 'Polygon',
           symbol: 'matic',
-          result: polygonNFTs['_data'],
+          result: {
+            total: _polygonNFTs['_data'].total,
+            page: _polygonNFTs['_data'].page,
+            page_size: _polygonNFTs['_data'].page_size,
+            cursor: _polygonNFTs['_data'].cursor,
+            result: this.createResult(_polygonNFTs['_data'].result),
+          },
         },
         Fantom: {
           chain: 'Fantom',
           symbol: 'ftm',
-          result: fantomNFTs['_data'],
+          result: {
+            total: _fantomNFTs['_data'].total,
+            page: _fantomNFTs['_data'].page,
+            page_size: _fantomNFTs['_data'].page_size,
+            cursor: _fantomNFTs['_data'].cursor,
+            result: this.createResult(_fantomNFTs['_data'].result),
+          },
         },
       };
     } catch (e) {
