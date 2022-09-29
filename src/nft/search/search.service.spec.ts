@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SearchService } from './search.service';
 
@@ -138,8 +138,8 @@ describe('SearchService', () => {
         expect(_filterUndefined).toHaveProperty('chain', 'Ethereum');
         expect(_filterUndefined).toHaveProperty('symbol', 'eth');
         expect(_filterUndefined).toHaveProperty('result');
-        expect(_filterUndefined.result.page).toEqual(0);
-        expect(_filterUndefined.result.page_size).toEqual(20);
+        expect(_filterUndefined.result.page).toEqual(1);
+        expect(_filterUndefined.result.page_size).toEqual(100);
       });
     });
 
@@ -149,7 +149,7 @@ describe('SearchService', () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const _keywordBelow3 = await service.searchNFTs('a', _eth, _filter);
         } catch (e) {
-          expect(e).toBeInstanceOf(BadRequestException);
+          expect(e).toBeInstanceOf(HttpException);
         }
       });
 
@@ -170,6 +170,8 @@ describe('SearchService', () => {
 
   describe('searchAllNFTs', () => {
     describe('should not throw a BadRequestException', () => {
+      jest.setTimeout(20000);
+
       it('The keyword is only', async () => {
         const _keywordOnly = await service.searchAllNFTs(_keyword);
 
@@ -181,26 +183,23 @@ describe('SearchService', () => {
         expect(_keywordOnly.Ethereum.result.page).toEqual(0);
         expect(_keywordOnly.Ethereum.result.page_size).toEqual(100);
         expect(_keywordOnly).toHaveProperty('BSC');
-        expect(_keywordOnly.Ethereum).toHaveProperty(
-          'chain',
-          'Binance Smart Chain',
-        );
-        expect(_keywordOnly.Ethereum).toHaveProperty('symbol', 'bsc');
-        expect(_keywordOnly.Ethereum).toHaveProperty('result');
-        expect(_keywordOnly.Ethereum.result.page).toEqual(0);
-        expect(_keywordOnly.Ethereum.result.page_size).toEqual(100);
+        expect(_keywordOnly.BSC).toHaveProperty('chain', 'Binance Smart Chain');
+        expect(_keywordOnly.BSC).toHaveProperty('symbol', 'bsc');
+        expect(_keywordOnly.BSC).toHaveProperty('result');
+        expect(_keywordOnly.BSC.result.page).toEqual(0);
+        expect(_keywordOnly.BSC.result.page_size).toEqual(100);
         expect(_keywordOnly).toHaveProperty('Polygon');
-        expect(_keywordOnly.Ethereum).toHaveProperty('chain', 'Polygon');
-        expect(_keywordOnly.Ethereum).toHaveProperty('symbol', 'matic');
-        expect(_keywordOnly.Ethereum).toHaveProperty('result');
-        expect(_keywordOnly.Ethereum.result.page).toEqual(0);
-        expect(_keywordOnly.Ethereum.result.page_size).toEqual(100);
+        expect(_keywordOnly.Polygon).toHaveProperty('chain', 'Polygon');
+        expect(_keywordOnly.Polygon).toHaveProperty('symbol', 'matic');
+        expect(_keywordOnly.Polygon).toHaveProperty('result');
+        expect(_keywordOnly.Polygon.result.page).toEqual(0);
+        expect(_keywordOnly.Polygon.result.page_size).toEqual(100);
         expect(_keywordOnly).toHaveProperty('Fantom');
-        expect(_keywordOnly.Ethereum).toHaveProperty('chain', 'Fantom');
-        expect(_keywordOnly.Ethereum).toHaveProperty('symbol', 'ftm');
-        expect(_keywordOnly.Ethereum).toHaveProperty('result');
-        expect(_keywordOnly.Ethereum.result.page).toEqual(0);
-        expect(_keywordOnly.Ethereum.result.page_size).toEqual(100);
+        expect(_keywordOnly.Fantom).toHaveProperty('chain', 'Fantom');
+        expect(_keywordOnly.Fantom).toHaveProperty('symbol', 'ftm');
+        expect(_keywordOnly.Fantom).toHaveProperty('result');
+        expect(_keywordOnly.Fantom.result.page).toEqual(0);
+        expect(_keywordOnly.Fantom.result.page_size).toEqual(100);
       });
 
       it.todo('The cursor and limit are undefined');

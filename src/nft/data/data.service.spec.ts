@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataService } from './data.service';
 
@@ -57,7 +57,7 @@ describe('DataService', () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const _invalidTokenId = await service.nftData(_tokenAddr, 'aa', _eth);
         } catch (e) {
-          expect(e).toBeInstanceOf(BadRequestException);
+          expect(e).toBeInstanceOf(HttpException);
         }
       });
     });
