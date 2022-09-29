@@ -20,9 +20,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm install
-      - name: Test unit
+      - name: Unit Test
         run: npm run test
-      - name: Test e2e
+      - name: E2E Test
         run: npm run test:e2e
       - name: Build
         run: npm run build
