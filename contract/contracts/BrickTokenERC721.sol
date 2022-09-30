@@ -156,10 +156,7 @@ contract BrickTokenERC721 is ERC721Enumerable {
         // 토큰이 판매되고 있는지 확인
         require(price > 0, 'nft token not sale.');
         // 보낸 코인이 책정된 가격 이상인지 확인
-        require(
-            (price * 1001) / 1000 <= msg.value,
-            'caller sent lower than price.'
-        );
+        require(price <= msg.value, 'caller sent lower than price.');
         // 토큰을 구입하는 사람은 원래 구매자와 같지 않은지 확인
         require(nftTokenOwner != msg.sender, 'caller is nft token owner.');
         // 해당 주소에게 권한을 받았는지 확인
@@ -168,10 +165,10 @@ contract BrickTokenERC721 is ERC721Enumerable {
             'nft token owner did not approve token.'
         );
 
+	payable(owner).transfer(price * 999 / 1000);
         payable(nftTokenOwner).transfer(price);
-        payable(owner).transfer(price / 1000);
-        if ((price * 1001) / 1000 < msg.value)
-            payable(msg.sender).transfer(msg.value - ((price * 1001) / 1000));
+        if (price < msg.value)
+            payable(msg.sender).transfer(msg.value - price);
 
         IERC721(address(this)).safeTransferFrom(
             nftTokenOwner,
