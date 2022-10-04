@@ -9,7 +9,7 @@ dotenv.config();
 
 @Injectable()
 export class MintService {
-  private readonly url = 'http://127.0.0.1:8545';
+  private readonly url = 'https://matic-mumbai.chainstacklabs.com';
   // private readonly network_id = 5777;
 
   private web3 = undefined;
