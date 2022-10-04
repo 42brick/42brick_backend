@@ -18,10 +18,13 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-//
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require('fs');
+const privateKey = fs.readFileSync('.secret').toString().trim();
+const mainNetPrivateKey = fs.readFileSync('.secret-main').toString().trim();
 
 module.exports = {
   /**
@@ -45,6 +48,23 @@ module.exports = {
       host: '127.0.0.1', // Localhost (default: none)
       port: 8545, // Standard Ethereum port (default: none)
       network_id: '*', // Any network (default: none)
+    },
+    mumbai: {
+      provider: () => new HDWalletProvider({
+        providerOrUrl: "https://matic-mumbai.chainstacklabs.com",
+        privateKeys: [privateKey]
+      }),
+      network_id: 80001
+    },
+    mainnet: {
+      provider: () => new HDWalletProvider({
+        providerOrUrl: process.env.POLYGON_MAINNET_URL,
+        privateKeys: [mainNetPrivateKey]
+      }),
+      network_id: 137,
+      gasPrice: 100000000000,
+      gas: 4988423,
+      networkCheckTimeout: 100000000
     },
     //
     // An additional network, but with some advanced options…

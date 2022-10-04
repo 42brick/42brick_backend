@@ -124,3 +124,8 @@ build/Release
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# Private Key for deploy
+.secret
+.secret-main

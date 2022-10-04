@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MintNftDto } from './dto/mint-nft.dto';
 import * as dotenv from 'dotenv';
-import { Web3Storage, File } from 'web3.storage';
+import { NFTStorage, File } from 'nft.storage';
 import Web3 from 'web3';
 import { readFileSync } from 'fs';
 
@@ -9,7 +9,7 @@ dotenv.config();
 
 @Injectable()
 export class MintService {
-  private readonly url: 'http://127.0.0.1:8545';
+  private readonly url = 'http://127.0.0.1:8545';
   // private readonly network_id = 5777;
 
   private web3 = undefined;
@@ -39,29 +39,26 @@ export class MintService {
 
   async CreateIpfsCid(file: Express.Multer.File, mintNft: MintNftDto) {
     const _tokenId = Number(await this.totalSupply()) + 1;
-    const _client = new Web3Storage({
-      token: process.env.WEB3_STORAGE_TOKEN,
-    });
+    const _client = new NFTStorage({ token: process.env.NFT_STORAGE_TOKEN });
     const _file = new File([file.buffer], String(_tokenId), {
       type: file.mimetype,
     });
-    const _cid = await _client.put([_file]);
 
-    const _metaData = {
+    const _metaData = await _client.store({
       name: mintNft.name,
       description: mintNft.description ? mintNft.description : null,
-      image: `ipfs://${_cid}/${_tokenId}`,
+      image: _file,
       decimals: 1,
       properties: {
         type: file.mimetype,
         external_url: mintNft.external_url ? mintNft.external_url : null,
       },
-    };
-    const _buffer = Buffer.from(JSON.stringify(_metaData));
-    // eslint-disable-next-line prettier/prettier
-    const _metaDataCid = await _client.put([new File([_buffer], `${_tokenId}.json`)]);
+    });
+
+    console.log(_metaData);
+    console.log(_metaData.url);
     return {
-      metadata_uri: `ipfs://${_metaDataCid}/${_tokenId}.json`,
+      ipfs_url: _metaData.url,
     };
   }
 }
