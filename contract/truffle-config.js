@@ -49,23 +49,6 @@ module.exports = {
       port: 8545, // Standard Ethereum port (default: none)
       network_id: '*', // Any network (default: none)
     },
-    mumbai: {
-      provider: () => new HDWalletProvider({
-        providerOrUrl: "https://matic-mumbai.chainstacklabs.com",
-        privateKeys: [privateKey]
-      }),
-      network_id: 80001
-    },
-    mainnet: {
-      provider: () => new HDWalletProvider({
-        providerOrUrl: process.env.POLYGON_MAINNET_URL,
-        privateKeys: [mainNetPrivateKey]
-      }),
-      network_id: 137,
-      gasPrice: 100000000000,
-      gas: 4988423,
-      networkCheckTimeout: 100000000
-    },
     //
     // An additional network, but with some advanced options…
     // advanced: {
@@ -94,6 +77,25 @@ module.exports = {
     //   network_id: 2111,   // This network is yours, in the cloud.
     //   production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    mumbai: {
+      provider: () =>
+        new HDWalletProvider({
+          providerOrUrl: 'https://matic-mumbai.chainstacklabs.com',
+          privateKeys: [privateKey],
+        }),
+      network_id: 80001,
+    },
+    mainnet: {
+      provider: () =>
+        new HDWalletProvider({
+          providerOrUrl: process.env.POLYGON_MAINNET_URL,
+          privateKeys: [mainNetPrivateKey],
+        }),
+      network_id: 137,
+      gasPrice: 100000000000,
+      gas: 4988423,
+      networkCheckTimeout: 100000000,
+    },
   },
 
   // Set default mocha options here, use special reporters, etc.
@@ -106,13 +108,14 @@ module.exports = {
     solc: {
       version: '0.8.15', // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
-      // settings: {          // See the solidity docs for advice about optimization and evmVersion
-      //  optimizer: {
-      //    enabled: false,
-      //    runs: 200
-      //  },
-      //  evmVersion: "byzantium"
-      // }
+      settings: {
+        // See the solidity docs for advice about optimization and evmVersion
+        optimizer: {
+          enabled: false,
+          runs: 200,
+        },
+        //  evmVersion: "byzantium"
+      },
     },
   },
 
